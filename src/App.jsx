@@ -36,12 +36,25 @@ const internships = [
 
 function App() {
   const [search, setSearch] = useState("");
+  const [locationFilter, setLocationFilter] = useState("All");
+  const [typeFilter, setTypeFilter] = useState("All");
 
-  const filteredInternships = internships.filter((internship) =>
+const filteredInternships = internships.filter((internship) => {
+  const matchesSearch =
     `${internship.role} ${internship.company} ${internship.location}`
       .toLowerCase()
-      .includes(search.toLowerCase())
-  );
+      .includes(search.toLowerCase());
+
+  const matchesLocation =
+    locationFilter === "All" ||
+    internship.location === locationFilter;
+
+  const matchesType =
+    typeFilter === "All" ||
+    internship.type === typeFilter;
+
+  return matchesSearch && matchesLocation && matchesType;
+});
 
   return (
     <div className="app">
@@ -78,6 +91,27 @@ function App() {
 
           <button>Search</button>
         </div>
+        <div className="filters">
+  <select
+    value={locationFilter}
+    onChange={(e) => setLocationFilter(e.target.value)}
+  >
+    <option value="All">All Locations</option>
+    <option value="Bengaluru">Bengaluru</option>
+    <option value="Hyderabad">Hyderabad</option>
+    <option value="Remote">Remote</option>
+  </select>
+
+  <select
+    value={typeFilter}
+    onChange={(e) => setTypeFilter(e.target.value)}
+  >
+    <option value="All">All Work Types</option>
+    <option value="Remote">Remote</option>
+    <option value="Hybrid">Hybrid</option>
+    <option value="On-site">On-site</option>
+  </select>
+</div>
       </section>
 
       <section className="internships" id="internships">

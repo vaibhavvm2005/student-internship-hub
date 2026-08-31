@@ -290,3 +290,31 @@ footer p {
     gap: 10px;
   }
 }
+
+.filters {
+  max-width: 680px;
+  margin: 14px auto 0;
+  display: flex;
+  gap: 12px;
+}
+
+.filters select {
+  flex: 1;
+  padding: 13px 15px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background: white;
+  color: #333;
+  outline: none;
+  cursor: pointer;
+}
+
+.filters select:focus {
+  border-color: #635bff;
+}
+
+@media (max-width: 600px) {
+  .filters {
+    flex-direction: column;
+  }
+}
