@@ -35,29 +35,68 @@ const internships = [
 ];
 
 function App() {
+  const [searchInput, setSearchInput] = useState("");
   const [search, setSearch] = useState("");
+
   const [locationFilter, setLocationFilter] = useState("All");
   const [typeFilter, setTypeFilter] = useState("All");
 
-const filteredInternships = internships.filter((internship) => {
-  const matchesSearch =
-    `${internship.role} ${internship.company} ${internship.location}`
-      .toLowerCase()
-      .includes(search.toLowerCase());
+  const [savedInternships, setSavedInternships] = useState([]);
 
-  const matchesLocation =
-    locationFilter === "All" ||
-    internship.location === locationFilter;
+  // Search function
+  const handleSearch = () => {
+    setSearch(searchInput.trim());
+  };
 
-  const matchesType =
-    typeFilter === "All" ||
-    internship.type === typeFilter;
+  // Search when pressing Enter
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      handleSearch();
+    }
+  };
 
-  return matchesSearch && matchesLocation && matchesType;
-});
+  // Filter internships
+  const filteredInternships = internships.filter((internship) => {
+    const searchText = [
+      internship.company,
+      internship.role,
+      internship.location,
+      internship.type,
+      internship.duration,
+      internship.stipend,
+      ...internship.skills,
+    ]
+      .join(" ")
+      .toLowerCase();
+
+    const matchesSearch = searchText.includes(search.toLowerCase());
+
+    const matchesLocation =
+      locationFilter === "All" ||
+      internship.location === locationFilter;
+
+    const matchesType =
+      typeFilter === "All" ||
+      internship.type === typeFilter;
+
+    return matchesSearch && matchesLocation && matchesType;
+  });
+
+  // Save / unsave internship
+  const toggleSave = (id) => {
+    setSavedInternships((current) => {
+      if (current.includes(id)) {
+        return current.filter((savedId) => savedId !== id);
+      }
+
+      return [...current, id];
+    });
+  };
 
   return (
     <div className="app">
+
+      {/* Navbar */}
       <nav className="navbar">
         <div className="logo">InternHub</div>
 
@@ -68,8 +107,12 @@ const filteredInternships = internships.filter((internship) => {
         </div>
       </nav>
 
+      {/* Hero Section */}
       <section className="hero" id="home">
-        <p className="eyebrow">YOUR CAREER STARTS HERE</p>
+
+        <p className="eyebrow">
+          YOUR CAREER STARTS HERE
+        </p>
 
         <h1>
           Find your next
@@ -77,100 +120,263 @@ const filteredInternships = internships.filter((internship) => {
         </h1>
 
         <p className="hero-text">
-          Discover internships, build your skills, and take the first step
-          toward your career.
+          Discover internships, build your skills, and take the
+          first step toward your career.
         </p>
 
+        {/* Search */}
         <div className="search-box">
+
           <input
             type="text"
             placeholder="Search internships, skills or companies..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            value={searchInput}
+            onChange={(event) =>
+              setSearchInput(event.target.value)
+            }
+            onKeyDown={handleKeyDown}
           />
 
-          <button>Search</button>
-        </div>
-        <div className="filters">
-  <select
-    value={locationFilter}
-    onChange={(e) => setLocationFilter(e.target.value)}
-  >
-    <option value="All">All Locations</option>
-    <option value="Bengaluru">Bengaluru</option>
-    <option value="Hyderabad">Hyderabad</option>
-    <option value="Remote">Remote</option>
-  </select>
+          <button
+            type="button"
+            onClick={handleSearch}
+          >
+            Search
+          </button>
 
-  <select
-    value={typeFilter}
-    onChange={(e) => setTypeFilter(e.target.value)}
-  >
-    <option value="All">All Work Types</option>
-    <option value="Remote">Remote</option>
-    <option value="Hybrid">Hybrid</option>
-    <option value="On-site">On-site</option>
-  </select>
-</div>
+        </div>
+
+        {/* Filters */}
+        <div className="filters">
+
+          <select
+            value={locationFilter}
+            onChange={(event) =>
+              setLocationFilter(event.target.value)
+            }
+          >
+            <option value="All">
+              All Locations
+            </option>
+
+            <option value="Bengaluru">
+              Bengaluru
+            </option>
+
+            <option value="Hyderabad">
+              Hyderabad
+            </option>
+
+            <option value="Remote">
+              Remote
+            </option>
+          </select>
+
+          <select
+            value={typeFilter}
+            onChange={(event) =>
+              setTypeFilter(event.target.value)
+            }
+          >
+            <option value="All">
+              All Work Types
+            </option>
+
+            <option value="Remote">
+              Remote
+            </option>
+
+            <option value="Hybrid">
+              Hybrid
+            </option>
+
+            <option value="On-site">
+              On-site
+            </option>
+          </select>
+
+        </div>
       </section>
 
-      <section className="internships" id="internships">
+      {/* Internship Section */}
+      <section
+        className="internships"
+        id="internships"
+      >
+
         <div className="section-heading">
+
           <div>
-            <p className="eyebrow">OPPORTUNITIES</p>
-            <h2>Latest internships</h2>
+            <p className="eyebrow">
+              OPPORTUNITIES
+            </p>
+
+            <h2>
+              Latest internships
+            </h2>
           </div>
 
-          <span>{filteredInternships.length} opportunities</span>
+          <span>
+            {filteredInternships.length} opportunities
+            {" · "}
+            {savedInternships.length} saved
+          </span>
+
         </div>
 
+        {/* Internship Cards */}
         <div className="internship-grid">
-          {filteredInternships.map((internship) => (
-            <article className="internship-card" key={internship.id}>
-              <div className="company-icon">
-                {internship.company.charAt(0)}
-              </div>
 
-              <p className="company">{internship.company}</p>
+          {filteredInternships.length > 0 ? (
 
-              <h3>{internship.role}</h3>
+            filteredInternships.map((internship) => {
 
-              <div className="details">
-                <span>📍 {internship.location}</span>
-                <span>💼 {internship.type}</span>
-                <span>⏳ {internship.duration}</span>
-              </div>
+              const isSaved =
+                savedInternships.includes(
+                  internship.id
+                );
 
-              <div className="skills">
-                {internship.skills.map((skill) => (
-                  <span key={skill}>{skill}</span>
-                ))}
-              </div>
+              return (
+                <article
+                  className="internship-card"
+                  key={internship.id}
+                >
 
-              <div className="card-bottom">
-                <strong>{internship.stipend}</strong>
-                <button>Apply Now</button>
-              </div>
-            </article>
-          ))}
+                  {/* Save Button */}
+                  <button
+                    type="button"
+                    className={`save-button ${
+                      isSaved ? "saved" : ""
+                    }`}
+                    onClick={() =>
+                      toggleSave(internship.id)
+                    }
+                    aria-label={
+                      isSaved
+                        ? "Remove saved internship"
+                        : "Save internship"
+                    }
+                  >
+                    {isSaved ? "♥" : "♡"}
+                  </button>
+
+                  {/* Company Icon */}
+                  <div className="company-icon">
+                    {internship.company.charAt(0)}
+                  </div>
+
+                  {/* Company */}
+                  <p className="company">
+                    {internship.company}
+                  </p>
+
+                  {/* Role */}
+                  <h3>
+                    {internship.role}
+                  </h3>
+
+                  {/* Details */}
+                  <div className="details">
+
+                    <span>
+                      📍 {internship.location}
+                    </span>
+
+                    <span>
+                      💼 {internship.type}
+                    </span>
+
+                    <span>
+                      ⏳ {internship.duration}
+                    </span>
+
+                  </div>
+
+                  {/* Skills */}
+                  <div className="skills">
+
+                    {internship.skills.map(
+                      (skill) => (
+                        <span key={skill}>
+                          {skill}
+                        </span>
+                      )
+                    )}
+
+                  </div>
+
+                  {/* Card Bottom */}
+                  <div className="card-bottom">
+
+                    <strong>
+                      {internship.stipend}
+                    </strong>
+
+                    <button type="button">
+                      Apply Now
+                    </button>
+
+                  </div>
+
+                </article>
+              );
+            })
+
+          ) : (
+
+            <div className="no-results">
+
+              <h3>
+                No internships found
+              </h3>
+
+              <p>
+                Try another keyword or change
+                your filters.
+              </p>
+
+            </div>
+
+          )}
+
         </div>
       </section>
 
-      <section className="about" id="about">
-        <p className="eyebrow">ABOUT INTERNHUB</p>
+      {/* About */}
+      <section
+        className="about"
+        id="about"
+      >
 
-        <h2>Helping students find opportunities.</h2>
+        <p className="eyebrow">
+          ABOUT INTERNHUB
+        </p>
+
+        <h2>
+          Helping students find opportunities.
+        </h2>
 
         <p>
-          InternHub is an open-source platform designed to make internship
-          discovery easier for students.
+          InternHub is an open-source platform
+          designed to make internship discovery
+          easier for students.
         </p>
+
       </section>
 
+      {/* Footer */}
       <footer>
-        <strong>InternHub</strong>
-        <p>Built for students, by the community.</p>
+
+        <strong>
+          InternHub
+        </strong>
+
+        <p>
+          Built for students, by the community.
+        </p>
+
       </footer>
+
     </div>
   );
 }
