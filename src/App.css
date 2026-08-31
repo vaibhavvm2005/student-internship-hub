@@ -1,0 +1,292 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Inter, Arial, sans-serif;
+  background: #f7f7f5;
+  color: #171717;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+.app {
+  min-height: 100vh;
+}
+
+/* NAVBAR */
+
+.navbar {
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 7%;
+  background: #ffffff;
+  border-bottom: 1px solid #e8e8e5;
+}
+
+.logo {
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.nav-links {
+  display: flex;
+  gap: 32px;
+}
+
+.nav-links a {
+  color: #555;
+  text-decoration: none;
+  font-size: 15px;
+}
+
+.nav-links a:hover {
+  color: #635bff;
+}
+
+/* HERO */
+
+.hero {
+  padding: 110px 7% 90px;
+  text-align: center;
+  background: #ffffff;
+}
+
+.eyebrow {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: #777;
+}
+
+.hero h1 {
+  max-width: 800px;
+  margin: 18px auto;
+  font-size: clamp(48px, 7vw, 82px);
+  line-height: 0.98;
+  letter-spacing: -4px;
+}
+
+.hero h1 span {
+  color: #635bff;
+}
+
+.hero-text {
+  max-width: 580px;
+  margin: 0 auto 35px;
+  color: #666;
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+/* SEARCH */
+
+.search-box {
+  max-width: 680px;
+  margin: auto;
+  display: flex;
+  padding: 6px;
+  background: #f3f3f0;
+  border: 1px solid #ddd;
+  border-radius: 14px;
+}
+
+.search-box input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  padding: 15px;
+}
+
+.search-box button {
+  border: none;
+  background: #171717;
+  color: white;
+  padding: 12px 22px;
+  border-radius: 9px;
+  cursor: pointer;
+}
+
+.search-box button:hover {
+  background: #635bff;
+}
+
+/* INTERNSHIPS */
+
+.internships {
+  max-width: 1200px;
+  margin: auto;
+  padding: 90px 7%;
+}
+
+.section-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  margin-bottom: 35px;
+}
+
+.section-heading h2 {
+  font-size: 42px;
+  margin: 8px 0;
+  letter-spacing: -2px;
+}
+
+.section-heading > span {
+  color: #777;
+}
+
+/* CARDS */
+
+.internship-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+
+.internship-card {
+  padding: 26px;
+  background: white;
+  border: 1px solid #e5e5e2;
+  border-radius: 18px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.internship-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+}
+
+.company-icon {
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: #eee;
+  font-weight: 800;
+}
+
+.company {
+  margin-bottom: 6px;
+  color: #777;
+}
+
+.internship-card h3 {
+  font-size: 21px;
+  margin-top: 8px;
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: #666;
+  font-size: 14px;
+}
+
+.skills {
+  margin: 20px 0;
+}
+
+.skills span {
+  display: inline-block;
+  padding: 6px 9px;
+  margin: 3px;
+  border-radius: 7px;
+  background: #f0f0ee;
+  font-size: 12px;
+}
+
+/* CARD BOTTOM */
+
+.card-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 18px;
+  border-top: 1px solid #eee;
+}
+
+.card-bottom button {
+  font-size: 13px;
+  border: none;
+  background: #171717;
+  color: white;
+  padding: 10px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.card-bottom button:hover {
+  background: #635bff;
+}
+
+/* ABOUT */
+
+.about {
+  padding: 100px 7%;
+  background: #171717;
+  color: white;
+  text-align: center;
+}
+
+.about h2 {
+  max-width: 700px;
+  margin: 15px auto;
+  font-size: 42px;
+  letter-spacing: -2px;
+}
+
+.about p:last-child {
+  max-width: 600px;
+  margin: auto;
+  color: #aaa;
+  line-height: 1.7;
+}
+
+/* FOOTER */
+
+footer {
+  padding: 35px 7%;
+  background: #111;
+  color: white;
+}
+
+footer p {
+  color: #888;
+}
+
+/* MOBILE */
+
+@media (max-width: 800px) {
+  .nav-links {
+    display: none;
+  }
+
+  .internship-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero h1 {
+    letter-spacing: -2px;
+  }
+
+  .search-box {
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .section-heading {
+    align-items: start;
+    flex-direction: column;
+    gap: 10px;
+  }
+}
