@@ -11,6 +11,7 @@ const internships = [
     duration: "3 Months",
     stipend: "₹15,000/month",
     skills: ["Python", "SQL", "Machine Learning"],
+    applyUrl: "https://example.com/technova",
   },
   {
     id: 2,
@@ -21,6 +22,7 @@ const internships = [
     duration: "6 Months",
     stipend: "₹20,000/month",
     skills: ["Python", "TensorFlow", "Machine Learning"],
+    applyUrl: "https://example.com/ailabs",
   },
   {
     id: 3,
@@ -31,6 +33,7 @@ const internships = [
     duration: "3 Months",
     stipend: "₹12,000/month",
     skills: ["React", "JavaScript", "CSS"],
+    applyUrl: "https://example.com/webworks",
   },
 ];
 
@@ -43,7 +46,9 @@ function App() {
 
   const [savedInternships, setSavedInternships] = useState([]);
 
-  // Search function
+  const [selectedInternship, setSelectedInternship] = useState(null);
+
+  // Search
   const handleSearch = () => {
     setSearch(searchInput.trim());
   };
@@ -53,6 +58,12 @@ function App() {
     if (event.key === "Enter") {
       handleSearch();
     }
+  };
+
+  // Clear search
+  const clearSearch = () => {
+    setSearchInput("");
+    setSearch("");
   };
 
   // Filter internships
@@ -69,7 +80,9 @@ function App() {
       .join(" ")
       .toLowerCase();
 
-    const matchesSearch = searchText.includes(search.toLowerCase());
+    const matchesSearch = searchText.includes(
+      search.toLowerCase()
+    );
 
     const matchesLocation =
       locationFilter === "All" ||
@@ -79,18 +92,29 @@ function App() {
       typeFilter === "All" ||
       internship.type === typeFilter;
 
-    return matchesSearch && matchesLocation && matchesType;
+    return (
+      matchesSearch &&
+      matchesLocation &&
+      matchesType
+    );
   });
 
   // Save / unsave internship
   const toggleSave = (id) => {
     setSavedInternships((current) => {
       if (current.includes(id)) {
-        return current.filter((savedId) => savedId !== id);
+        return current.filter(
+          (savedId) => savedId !== id
+        );
       }
 
       return [...current, id];
     });
+  };
+
+  // Close modal
+  const closeModal = () => {
+    setSelectedInternship(null);
   };
 
   return (
@@ -98,7 +122,9 @@ function App() {
 
       {/* Navbar */}
       <nav className="navbar">
-        <div className="logo">InternHub</div>
+        <div className="logo">
+          InternHub
+        </div>
 
         <div className="nav-links">
           <a href="#home">Home</a>
@@ -107,9 +133,11 @@ function App() {
         </div>
       </nav>
 
-      {/* Hero Section */}
-      <section className="hero" id="home">
-
+      {/* Hero */}
+      <section
+        className="hero"
+        id="home"
+      >
         <p className="eyebrow">
           YOUR CAREER STARTS HERE
         </p>
@@ -120,8 +148,8 @@ function App() {
         </h1>
 
         <p className="hero-text">
-          Discover internships, build your skills, and take the
-          first step toward your career.
+          Discover internships, build your skills, and
+          take the first step toward your career.
         </p>
 
         {/* Search */}
@@ -195,10 +223,22 @@ function App() {
             </option>
           </select>
 
+          {(searchInput ||
+            locationFilter !== "All" ||
+            typeFilter !== "All") && (
+            <button
+              type="button"
+              className="clear-button"
+              onClick={clearSearch}
+            >
+              Clear Search
+            </button>
+          )}
+
         </div>
       </section>
 
-      {/* Internship Section */}
+      {/* Internships */}
       <section
         className="internships"
         id="internships"
@@ -224,103 +264,119 @@ function App() {
 
         </div>
 
-        {/* Internship Cards */}
+        {/* Cards */}
         <div className="internship-grid">
 
           {filteredInternships.length > 0 ? (
 
-            filteredInternships.map((internship) => {
+            filteredInternships.map(
+              (internship) => {
 
-              const isSaved =
-                savedInternships.includes(
-                  internship.id
-                );
+                const isSaved =
+                  savedInternships.includes(
+                    internship.id
+                  );
 
-              return (
-                <article
-                  className="internship-card"
-                  key={internship.id}
-                >
-
-                  {/* Save Button */}
-                  <button
-                    type="button"
-                    className={`save-button ${
-                      isSaved ? "saved" : ""
-                    }`}
-                    onClick={() =>
-                      toggleSave(internship.id)
-                    }
-                    aria-label={
-                      isSaved
-                        ? "Remove saved internship"
-                        : "Save internship"
-                    }
+                return (
+                  <article
+                    className="internship-card"
+                    key={internship.id}
                   >
-                    {isSaved ? "♥" : "♡"}
-                  </button>
 
-                  {/* Company Icon */}
-                  <div className="company-icon">
-                    {internship.company.charAt(0)}
-                  </div>
-
-                  {/* Company */}
-                  <p className="company">
-                    {internship.company}
-                  </p>
-
-                  {/* Role */}
-                  <h3>
-                    {internship.role}
-                  </h3>
-
-                  {/* Details */}
-                  <div className="details">
-
-                    <span>
-                      📍 {internship.location}
-                    </span>
-
-                    <span>
-                      💼 {internship.type}
-                    </span>
-
-                    <span>
-                      ⏳ {internship.duration}
-                    </span>
-
-                  </div>
-
-                  {/* Skills */}
-                  <div className="skills">
-
-                    {internship.skills.map(
-                      (skill) => (
-                        <span key={skill}>
-                          {skill}
-                        </span>
-                      )
-                    )}
-
-                  </div>
-
-                  {/* Card Bottom */}
-                  <div className="card-bottom">
-
-                    <strong>
-                      {internship.stipend}
-                    </strong>
-
-                    <button type="button">
-                      Apply Now
+                    {/* Save */}
+                    <button
+                      type="button"
+                      className={`save-button ${
+                        isSaved ? "saved" : ""
+                      }`}
+                      onClick={() =>
+                        toggleSave(internship.id)
+                      }
+                      aria-label={
+                        isSaved
+                          ? "Remove saved internship"
+                          : "Save internship"
+                      }
+                    >
+                      {isSaved ? "♥" : "♡"}
                     </button>
 
-                  </div>
+                    {/* Company Icon */}
+                    <div className="company-icon">
+                      {internship.company.charAt(0)}
+                    </div>
 
-                </article>
-              );
-            })
+                    {/* Company */}
+                    <p className="company">
+                      {internship.company}
+                    </p>
+
+                    {/* Role */}
+                    <h3
+                      className="clickable-title"
+                      onClick={() =>
+                        setSelectedInternship(
+                          internship
+                        )
+                      }
+                    >
+                      {internship.role}
+                    </h3>
+
+                    {/* Details */}
+                    <div className="details">
+
+                      <span>
+                        📍 {internship.location}
+                      </span>
+
+                      <span>
+                        💼 {internship.type}
+                      </span>
+
+                      <span>
+                        ⏳ {internship.duration}
+                      </span>
+
+                    </div>
+
+                    {/* Skills */}
+                    <div className="skills">
+
+                      {internship.skills.map(
+                        (skill) => (
+                          <span key={skill}>
+                            {skill}
+                          </span>
+                        )
+                      )}
+
+                    </div>
+
+                    {/* Card Bottom */}
+                    <div className="card-bottom">
+
+                      <strong>
+                        {internship.stipend}
+                      </strong>
+
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setSelectedInternship(
+                            internship
+                          )
+                        }
+                      >
+                        View Details
+                      </button>
+
+                    </div>
+
+                  </article>
+                );
+              }
+            )
 
           ) : (
 
@@ -334,6 +390,18 @@ function App() {
                 Try another keyword or change
                 your filters.
               </p>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setSearchInput("");
+                  setSearch("");
+                  setLocationFilter("All");
+                  setTypeFilter("All");
+                }}
+              >
+                Reset Filters
+              </button>
 
             </div>
 
@@ -376,6 +444,100 @@ function App() {
         </p>
 
       </footer>
+
+      {/* Internship Details Modal */}
+      {selectedInternship && (
+
+        <div
+          className="modal-overlay"
+          onClick={closeModal}
+        >
+
+          <div
+            className="internship-modal"
+            onClick={(event) =>
+              event.stopPropagation()
+            }
+          >
+
+            {/* Close */}
+            <button
+              type="button"
+              className="close-modal"
+              onClick={closeModal}
+              aria-label="Close internship details"
+            >
+              ×
+            </button>
+
+            {/* Company Icon */}
+            <div className="company-icon">
+              {selectedInternship.company.charAt(0)}
+            </div>
+
+            {/* Company */}
+            <p className="company">
+              {selectedInternship.company}
+            </p>
+
+            {/* Role */}
+            <h2>
+              {selectedInternship.role}
+            </h2>
+
+            {/* Details */}
+            <div className="modal-details">
+
+              <p>
+                📍 {selectedInternship.location}
+              </p>
+
+              <p>
+                💼 {selectedInternship.type}
+              </p>
+
+              <p>
+                ⏳ {selectedInternship.duration}
+              </p>
+
+              <p>
+                💰 {selectedInternship.stipend}
+              </p>
+
+            </div>
+
+            {/* Skills */}
+            <h4>
+              Required Skills
+            </h4>
+
+            <div className="skills">
+
+              {selectedInternship.skills.map(
+                (skill) => (
+                  <span key={skill}>
+                    {skill}
+                  </span>
+                )
+              )}
+
+            </div>
+
+            {/* Apply */}
+            <a
+              href={selectedInternship.applyUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="modal-apply"
+            >
+              Apply Now
+            </a>
+
+          </div>
+
+        </div>
+
+      )}
 
     </div>
   );
