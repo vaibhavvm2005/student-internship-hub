@@ -115,7 +115,7 @@ function App() {
 
               <div className="card-bottom">
                 <strong>{internship.stipend}</strong>
-                <button>View Details →</button>
+                <button>Apply Now</button>
               </div>
             </article>
           ))}
